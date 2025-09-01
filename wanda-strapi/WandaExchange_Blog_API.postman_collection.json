@@ -1,0 +1,411 @@
+{
+	"info": {
+		"_postman_id": "wandaexchange-blog-api",
+		"name": "WandaExchange Blog API",
+		"description": "Complete API collection for testing WandaExchange Blog endpoints with multilingual support",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Articles",
+			"item": [
+				{
+					"name": "Get All Articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles?page=1&limit=10&locale=en",
+							"host": ["{{base_url}}"],
+							"path": ["api", "articles"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "locale",
+									"value": "en"
+								}
+							]
+						},
+						"description": "Get all articles with pagination and filtering"
+					}
+				},
+				{
+					"name": "Get Articles - Polish",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles?page=1&limit=10&locale=pl",
+							"host": ["{{base_url}}"],
+							"path": ["api", "articles"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "locale",
+									"value": "pl"
+								}
+							]
+						},
+						"description": "Get all articles in Polish"
+					}
+				},
+				{
+					"name": "Get Articles by Tag",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles/tag/crypto?locale=en&page=1&limit=5",
+							"host": ["{{base_url}}"],
+							"path": ["api", "articles", "tag", "crypto"],
+							"query": [
+								{
+									"key": "locale",
+									"value": "en"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Get articles filtered by tag"
+					}
+				},
+				{
+					"name": "Search Articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles?search=blockchain&locale=en&page=1&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "articles"],
+							"query": [
+								{
+									"key": "search",
+									"value": "blockchain"
+								},
+								{
+									"key": "locale",
+									"value": "en"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Search articles by keyword"
+					}
+				},
+				{
+					"name": "Get Featured Articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles/featured?locale=en&limit=5",
+							"host": ["{{base_url}}"],
+							"path": ["api", "articles", "featured"],
+							"query": [
+								{
+									"key": "locale",
+									"value": "en"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Get featured articles"
+					}
+				},
+				{
+					"name": "Get Article by Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles/slug/future-of-cryptocurrency-2025?locale=en",
+							"host": ["{{base_url}}"],
+							"path": ["api", "articles", "slug", "future-of-cryptocurrency-2025"],
+							"query": [
+								{
+									"key": "locale",
+									"value": "en"
+								}
+							]
+						},
+						"description": "Get article by slug"
+					}
+				},
+				{
+					"name": "Create Article",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Test Article\",\n  \"content\": \"<p>This is a test article content.</p>\",\n  \"shortDescription\": \"A test article for API validation\",\n  \"author\": \"Test Author\",\n  \"publicationDate\": \"2025-08-12T10:00:00.000Z\",\n  \"locale\": \"en\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/articles",
+							"host": ["{{base_url}}"],
+							"path": ["api", "articles"]
+						},
+						"description": "Create a new article (requires authentication)"
+					}
+				}
+			]
+		},
+		{
+			"name": "Tags",
+			"item": [
+				{
+					"name": "Get All Tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tags?locale=en&limit=50",
+							"host": ["{{base_url}}"],
+							"path": ["api", "tags"],
+							"query": [
+								{
+									"key": "locale",
+									"value": "en"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						},
+						"description": "Get all tags with article counts"
+					}
+				},
+				{
+					"name": "Get Tags - Polish",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tags?locale=pl&limit=50",
+							"host": ["{{base_url}}"],
+							"path": ["api", "tags"],
+							"query": [
+								{
+									"key": "locale",
+									"value": "pl"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						},
+						"description": "Get all tags in Polish"
+					}
+				},
+				{
+					"name": "Get Tag by Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tags/slug/crypto?locale=en",
+							"host": ["{{base_url}}"],
+							"path": ["api", "tags", "slug", "crypto"],
+							"query": [
+								{
+									"key": "locale",
+									"value": "en"
+								}
+							]
+						},
+						"description": "Get tag by slug with article count"
+					}
+				},
+				{
+					"name": "Get Popular Tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tags/popular?locale=en&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "tags", "popular"],
+							"query": [
+								{
+									"key": "locale",
+									"value": "en"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Get popular tags ranked by article count"
+					}
+				},
+				{
+					"name": "Create Tag",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test Tag\",\n  \"description\": \"A test tag for API validation\",\n  \"locale\": \"en\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tags",
+							"host": ["{{base_url}}"],
+							"path": ["api", "tags"]
+						},
+						"description": "Create a new tag (requires authentication)"
+					}
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Admin Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"identifier\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/auth",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "auth"]
+						},
+						"description": "Login to get admin token"
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "API Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles",
+							"host": ["{{base_url}}"],
+							"path": ["api", "articles"]
+						},
+						"description": "Check if API is responding"
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "test",
+			"script": {
+				"exec": [
+					"// Test response status",
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});",
+					"",
+					"// Test response time",
+					"pm.test(\"Response time is less than 500ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(500);",
+					"});",
+					"",
+					"// Test response structure",
+					"pm.test(\"Response has required structure\", function () {",
+					"    const response = pm.response.json();",
+					"    pm.expect(response).to.have.property('data');",
+					"});"
+				],
+				"type": "text/javascript"
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:1337",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": "your_admin_token_here",
+			"type": "string"
+		},
+		{
+			"key": "admin_email",
+			"value": "admin@wandaexchange.com",
+			"type": "string"
+		},
+		{
+			"key": "admin_password",
+			"value": "your_admin_password",
+			"type": "string"
+		}
+	]
+}

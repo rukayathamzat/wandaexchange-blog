@@ -1,0 +1,63 @@
+name: Smoke Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      STRAPI_DIR: strapi/wandaexchange-blog
+      NODE_ENV: development
+      DATABASE_CLIENT: sqlite
+      DATABASE_FILENAME: .tmp/data.db
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+          cache-dependency-path: ${{ env.STRAPI_DIR }}/package.json
+
+      - name: Install dependencies
+        working-directory: ${{ env.STRAPI_DIR }}
+        run: npm ci || npm install
+
+      - name: Build Strapi
+        working-directory: ${{ env.STRAPI_DIR }}
+        run: npm run build
+
+      - name: Start Strapi in background
+        working-directory: ${{ env.STRAPI_DIR }}
+        run: |
+          nohup npm run start &
+          echo $! > ../strapi_pid.txt
+
+      - name: Wait for Strapi to be ready
+        run: |
+          for i in {1..60}; do
+            if curl -sSf http://localhost:1337/admin > /dev/null; then
+              echo "Strapi is up"; exit 0; fi; sleep 5; done; exit 1
+
+      - name: Seed demo content
+        run: |
+          npm init -y >/dev/null 2>&1 || true
+          npm i axios >/dev/null 2>&1
+          node create-content.js
+
+      - name: Verify API endpoints
+        run: |
+          curl -sSf "http://localhost:1337/api/articles?locale=en" | head -c 200 | cat
+          curl -sSf "http://localhost:1337/api/tags?locale=en" | head -c 200 | cat
+
+      - name: Stop Strapi
+        if: always()
+        run: |
+          kill $(cat strapi/strapi_pid.txt) || true
+
+
+
