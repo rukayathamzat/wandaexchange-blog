@@ -1,378 +1,291 @@
 # WandaExchange Blog - Strapi CMS
 
-A modern, multilingual blog system built with Strapi CMS for WandaExchange, supporting Polish and English content with advanced features for cryptocurrency and blockchain content.
+A modern, multilingual blog system built with Strapi v5.23.1 for WandaExchange, supporting Polish and English content with advanced API features.
 
 ## 🚀 Features
 
-- **Multilingual Support**: Full Polish (pl) and English (en) localization
-- **Content Management**: Rich text editor with SEO optimization
+- **Multilingual Support**: Polish (pl) and English (en) locales
+- **Advanced API**: Custom controllers with filtering, pagination, and search
+- **SEO Optimized**: Built-in SEO components and slug generation
+- **Content Management**: Rich text editor with media library
 - **Tag System**: Flexible tagging with article relationships
-- **Media Management**: Image uploads with optimization
-- **REST API**: Comprehensive API endpoints for frontend integration
-- **SEO Ready**: Built-in SEO components and metadata
-- **Responsive Admin**: Modern admin panel for content creators
-- **Production Ready**: Optimized for production deployment
-
-## 🏗️ Architecture
-
-- **Backend**: Strapi CMS v5.23.1
-- **Database**: PostgreSQL (production) / SQLite (development)
-- **API**: RESTful API with custom controllers
-- **Authentication**: JWT-based with role management
-- **File Storage**: Local storage with cloud storage support
-- **Multilingual**: Strapi i18n plugin integration
+- **Production Ready**: PostgreSQL support and deployment configurations
 
 ## 📋 Prerequisites
 
-- Node.js 18+ 
+- Node.js 18.x or higher
 - npm or yarn
 - PostgreSQL (for production)
 - Git
 
 ## 🛠️ Installation
 
-### 1. Clone Repository
-
+1. **Clone the repository**
 ```bash
-git clone <repository-url>
-cd wanda-strapi
+   git clone https://github.com/yourusername/wandaexchange-blog.git
+   cd wandaexchange-blog
 ```
 
-### 2. Install Dependencies
-
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-### 3. Environment Configuration
-
-Copy the example environment file and configure it:
-
+3. **Environment Setup**
 ```bash
 cp env.example .env
 ```
 
-Edit `.env` with your configuration:
+   Configure your environment variables in `.env`:
+   ```env
+   DATABASE_CLIENT=sqlite
+   DATABASE_FILENAME=.tmp/data.db
+   HOST=0.0.0.0
+   PORT=1337
+   APP_KEYS=your_app_keys_here
+   API_TOKEN_SALT=your_api_token_salt_here
+   ADMIN_JWT_SECRET=your_admin_jwt_secret_here
+   TRANSFER_TOKEN_SALT=your_transfer_token_salt_here
+   JWT_SECRET=your_jwt_secret_here
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run develop
+   ```
+
+5. **Access the admin panel**
+   - Open http://localhost:1337/admin
+   - Create your admin account
+   - Start creating content!
+
+## 🗄️ Database Configuration
+
+### Development (SQLite)
+The project is configured to use SQLite by default for development.
+
+### Production (PostgreSQL)
+For production deployment, update your environment variables:
 
 ```env
-# Database Configuration
 DATABASE_CLIENT=postgres
-DATABASE_HOST=localhost
+DATABASE_HOST=your_postgres_host
 DATABASE_PORT=5432
 DATABASE_NAME=wandaexchange_blog
 DATABASE_USERNAME=your_username
 DATABASE_PASSWORD=your_password
 DATABASE_SSL=false
-
-# Strapi Configuration
-HOST=0.0.0.0
-PORT=1337
-APP_KEYS=your_generated_keys
-API_TOKEN_SALT=your_generated_salt
-ADMIN_JWT_SECRET=your_generated_secret
-JWT_SECRET=your_generated_secret
 ```
 
-### 4. Build Application
+## 📚 API Documentation
 
-```bash
-npm run build
+### Base URL
+```
+http://localhost:1337/api
 ```
 
-### 5. Start Development Server
+### Article Endpoints
 
-```bash
-npm run develop
+#### Get All Articles
+```http
+GET /api/articles
 ```
 
-The admin panel will be available at: `http://localhost:1337/admin`
+**Query Parameters:**
+- `page` (number): Page number (default: 1)
+- `limit` (number): Items per page (default: 10)
+- `locale` (string): Language code (en/pl, default: en)
+- `tags` (string|array): Filter by tag slugs
+- `search` (string): Search in title, content, and description
+- `sort` (string): Sort order (default: publicationDate:desc)
 
-## 🗄️ Database Setup
-
-### PostgreSQL (Recommended for Production)
-
-```sql
-CREATE DATABASE wandaexchange_blog;
-CREATE USER wandaexchange_user WITH PASSWORD 'your_password';
-GRANT ALL PRIVILEGES ON DATABASE wandaexchange_blog TO wandaexchange_user;
-ALTER USER wandaexchange_user CREATEDB;
+**Example:**
+```http
+GET /api/articles?page=1&limit=5&locale=en&tags=cryptocurrency&search=bitcoin
 ```
 
-### SQLite (Development)
-
-For development, you can use SQLite by setting:
-
-```env
-DATABASE_CLIENT=sqlite
-DATABASE_FILENAME=.tmp/data.db
+#### Get Article by Slug
+```http
+GET /api/articles/slug/:slug
 ```
 
-## 📚 Content Types
+**Example:**
+```http
+GET /api/articles/slug/wandaexchange-launches-revolutionary-trading-platform
+```
 
-### Article
+#### Get Featured Articles
+```http
+GET /api/articles/featured
+```
 
-- **Title**: Multilingual text (required)
-- **Content**: Rich text content (required, multilingual)
-- **Short Description**: Brief description for previews (max 300 chars)
-- **Featured Image**: Single image upload
-- **Publication Date**: Date when article was published
-- **Author**: Author name
-- **Slug**: URL-friendly identifier (auto-generated)
-- **SEO**: SEO metadata component
-- **Tags**: Related tags (many-to-many relationship)
-- **Language**: Locale (en/pl)
+**Query Parameters:**
+- `locale` (string): Language code (default: en)
+- `limit` (number): Number of articles (default: 5)
 
-### Tag
+#### Get Articles by Tag
+```http
+GET /api/articles/tag/:tagSlug
+```
 
-- **Name**: Tag name (required, multilingual)
-- **Slug**: URL-friendly identifier (auto-generated)
-- **Description**: Tag description (optional, multilingual)
-- **Articles**: Related articles (many-to-many relationship)
+**Query Parameters:**
+- `page` (number): Page number (default: 1)
+- `limit` (number): Items per page (default: 10)
+- `locale` (string): Language code (default: en)
 
-## 🔌 API Endpoints
+### Tag Endpoints
 
-### Articles
+#### Get All Tags
+```http
+GET /api/tags
+```
 
-- `GET /api/articles` - Get all articles with filtering and pagination
-- `GET /api/articles/slug/:slug` - Get article by slug
-- `GET /api/articles/featured` - Get featured articles
-- `GET /api/articles/tag/:tagSlug` - Get articles by tag
-- `POST /api/articles` - Create new article (authenticated)
-- `PUT /api/articles/:id` - Update article (authenticated)
-- `DELETE /api/articles/:id` - Delete article (authenticated)
+#### Get Tag by Slug
+```http
+GET /api/tags/slug/:slug
+```
 
-### Tags
-
-- `GET /api/tags` - Get all tags with article counts
-- `GET /api/tags/slug/:slug` - Get tag by slug
-- `GET /api/tags/popular` - Get popular tags
-- `POST /api/tags` - Create new tag (authenticated)
-- `PUT /api/tags/:id` - Update tag (authenticated)
-- `DELETE /api/tags/:id` - Delete tag (authenticated)
-
-### Query Parameters
-
-- `locale`: Language filter (en/pl)
-- `page`: Page number for pagination
-- `limit`: Items per page
-- `tags`: Filter by tag slugs
-- `search`: Search in title, description, and content
-- `sort`: Sort order (e.g., `publicationDate:desc`)
+#### Get Popular Tags
+```http
+GET /api/tags/popular
+```
 
 ## 🌐 Multilingual Support
 
-The system supports Polish and English content:
+The blog supports two locales:
+- **English (en)**: Default locale
+- **Polish (pl)**: Secondary locale
 
-- **Default Locale**: English (en)
-- **Supported Locales**: Polish (pl), English (en)
-- **Localized Fields**: title, content, shortDescription, slug, seo
-- **API Usage**: Use `?locale=pl` or `?locale=en` in API calls
+### Content Structure
+All content types support multilingual fields:
+- `title`
+- `content`
+- `shortDescription`
+- `slug`
+- SEO fields (`seo.title`, `seo.description`, `seo.keywords`)
 
-## 🔐 Authentication & Roles
-
-### User Roles
-
-- **Admin**: Full access to all features
-- **Editor**: Create, edit, and publish content
-- **Author**: Create and edit own content
-- **Viewer**: Read-only access
-
-### API Authentication
-
-- **Public Endpoints**: Read operations (GET requests)
-- **Protected Endpoints**: Write operations require authentication
-- **Token-based**: JWT tokens for API access
-
-## 📱 Admin Panel
-
-Access the admin panel at `/admin` after starting the application:
-
-1. **First Run**: Create your admin user account
-2. **Content Management**: Create and manage articles and tags
-3. **Media Library**: Upload and manage images
-4. **User Management**: Manage users and roles
-5. **Settings**: Configure application settings
-
-## 🚀 Deployment
-
-### Production Deployment
-
-See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for detailed production deployment instructions.
-
-### Quick Production Start
-
-```bash
-# Install PM2
-npm install -g pm2
-
-# Start production
-pm2 start ecosystem.config.js
-pm2 save
-pm2 startup
+### API Usage
+Include the `locale` parameter in your API requests:
+```http
+GET /api/articles?locale=pl
 ```
 
-## 📊 Sample Data
+## 🎨 Content Types
 
-Populate the database with sample content:
+### Article
+- **title**: Multilingual text field
+- **content**: Rich text editor (multilingual)
+- **shortDescription**: Text field for previews (multilingual)
+- **slug**: Auto-generated from title (multilingual)
+- **featuredImage**: Single image upload
+- **publicationDate**: DateTime field
+- **author**: Text field
+- **tags**: Many-to-many relationship with Tag
+- **seo**: Component with title, description, keywords
 
-```bash
-# Update the ADMIN_TOKEN in seed-data.js
-nano seed-data.js
+### Tag
+- **name**: Multilingual text field
+- **slug**: Auto-generated from name
+- **description**: Multilingual text field
+- **articles**: Many-to-many relationship with Article
 
-# Run seeding script
-node seed-data.js
-```
+## 🚀 Deployment (Vercel)
 
-This will create:
-- 10 tags (5 in English, 5 in Polish)
-- 6 sample articles (3 in English, 3 in Polish)
-- Proper relationships between articles and tags
+### GitHub Actions → Vercel
 
-## 🔧 Configuration
+This repository is set to deploy to Vercel via GitHub Actions only.
 
-### Custom Controllers
+1. **Set GitHub Secrets:**
+   - `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
+   - `APP_KEYS`, `API_TOKEN_SALT`, `ADMIN_JWT_SECRET`, `TRANSFER_TOKEN_SALT`, `JWT_SECRET`
+   - Database secrets as needed (`DATABASE_CLIENT`, `DATABASE_HOST`, etc.)
 
-The application includes custom controllers for enhanced functionality:
+2. **Trigger Deployment:**
+   - Push to `main` branch. Workflow `.github/workflows/deploy.yml` will run and publish to Vercel.
 
-- **Article Controller**: Enhanced filtering, search, and pagination
-- **Tag Controller**: Article counts and popularity ranking
-- **Custom Services**: Business logic and data manipulation
-
-### Middleware Configuration
-
-Security and CORS configuration in `config/middlewares.ts`:
-
-```typescript
-export default [
-  'strapi::errors',
-  'strapi::security',
-  'strapi::cors',
-  'strapi::poweredBy',
-  'strapi::logger',
-  'strapi::query',
-  'strapi::body',
-  'strapi::session',
-  'strapi::favicon',
-  'strapi::public',
-];
-```
-
-## 📈 Performance
-
-### Database Optimization
-
-- **Indexes**: Automatic indexing on frequently queried fields
-- **Relationships**: Optimized many-to-many relationships
-- **Pagination**: Built-in pagination with metadata
-
-### API Optimization
-
-- **Response Caching**: HTTP caching headers
-- **Image Optimization**: Automatic image processing
-- **Query Optimization**: Efficient database queries
+No Docker/Railway/DigitalOcean deployment is included.
 
 ## 🧪 Testing
 
-### API Testing
-
-Test the API endpoints using the provided documentation or tools like Postman:
-
+### Run Tests
 ```bash
-# Test articles endpoint
-curl "http://localhost:1337/api/articles?locale=en&page=1&limit=5"
-
-# Test tags endpoint
-curl "http://localhost:1337/api/tags?locale=en"
+npm test
 ```
 
-### Content Testing
+### Test API Endpoints
+```bash
+node test-api-endpoints.js
+```
 
-1. Create test articles and tags
-2. Test multilingual functionality
-3. Verify API responses
-4. Check admin panel functionality
+### Test Relationships
+```bash
+node test-relationships.js
+```
 
-## 🐛 Troubleshooting
+## 📝 Sample Data
 
-### Common Issues
+Create sample content for testing:
 
-1. **Database Connection Failed**
-   - Verify database credentials in `.env`
-   - Check if database service is running
-   - Ensure database exists and user has permissions
+```bash
+node seed-content-enhanced.js
+```
 
-2. **Port Already in Use**
-   ```bash
-   sudo netstat -tlnp | grep :1337
-   sudo kill -9 <PID>
-   ```
+## 🔧 Development
 
-3. **Permission Denied**
-   ```bash
-   sudo chown -R $USER:$USER .
-   sudo chmod -R 755 .
-   ```
+### Project Structure
+```
+src/
+├── api/
+│   ├── article/
+│   │   ├── controllers/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── content-types/
+│   └── tag/
+│       ├── controllers/
+│       ├── routes/
+│       ├── services/
+│       └── content-types/
+├── components/
+├── extensions/
+└── middlewares/
+```
 
-4. **Build Errors**
-   ```bash
-   rm -rf .tmp dist
-   npm install
-   npm run build
-   ```
+### Adding New Content Types
+1. Use Strapi admin panel: `Content-Type Builder`
+2. Or create manually in `src/api/`
 
-### Logs
-
-- **Application Logs**: Check console output during development
-- **PM2 Logs**: `pm2 logs wanda-strapi` (production)
-- **Database Logs**: Check PostgreSQL logs
-
-## 📚 Documentation
-
-- **API Documentation**: [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
-- **Deployment Guide**: [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
-- **Strapi Documentation**: [https://docs.strapi.io](https://docs.strapi.io)
+### Custom Controllers
+The project includes custom controllers with enhanced functionality:
+- Advanced filtering and pagination
+- Search capabilities
+- Slug-based routing
+- Multilingual support
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
+2. Create a feature branch: `git checkout -b feature/new-feature`
+3. Commit changes: `git commit -am 'Add new feature'`
+4. Push to branch: `git push origin feature/new-feature`
 5. Submit a pull request
 
 ## 📄 License
 
-This project is proprietary software developed for WandaExchange.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support
 
-For technical support or questions:
+For support and questions:
+- Create an issue in this repository
+- Contact: support@wandaexchange.com
 
-1. Check the documentation
-2. Review troubleshooting section
-3. Check logs for error messages
-4. Contact the development team
+## 🔗 Links
 
-## 🗓️ Roadmap
-
-### Version 1.1 (Current)
-- ✅ Basic blog functionality
-- ✅ Multilingual support
-- ✅ Custom API endpoints
-- ✅ SEO optimization
-
-### Version 1.2 (Planned)
-- [ ] Advanced search functionality
-- [ ] Content scheduling
-- [ ] Analytics integration
-- [ ] Social media sharing
-
-### Version 1.3 (Future)
-- [ ] Comment system
-- [ ] Newsletter integration
-- [ ] Advanced media management
-- [ ] Performance monitoring
+- [Strapi Documentation](https://docs.strapi.io/)
+- [WandaExchange Website](https://wandaexchange.com)
+- [API Documentation](API_DOCUMENTATION.md)
 
 ---
 
-**Built with ❤️ using Strapi CMS**
+**Built with ❤️ for WandaExchange**

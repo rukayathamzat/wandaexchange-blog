@@ -1,44 +1,30 @@
 {
-  "name": "wanda-strapi",
-  "version": "0.1.0",
+  "name": "wandaexchange-blog",
   "private": true,
-  "description": "A Strapi application",
+  "version": "0.1.0",
+  "description": "WandaExchange Blog API built with Strapi",
   "scripts": {
     "build": "strapi build",
-    "console": "strapi console",
-    "deploy": "strapi deploy",
-    "dev": "strapi develop",
     "develop": "strapi develop",
     "start": "strapi start",
-    "strapi": "strapi",
-    "upgrade": "npx @strapi/upgrade latest",
-    "upgrade:dry": "npx @strapi/upgrade latest --dry"
+    "strapi": "strapi"
   },
+  "devDependencies": {},
   "dependencies": {
-    "@strapi/plugin-cloud": "5.23.1",
-    "@strapi/plugin-users-permissions": "5.23.1",
-    "@strapi/strapi": "5.23.1",
-    "axios": "^1.11.0",
-    "better-sqlite3": "11.3.0",
-    "express-rate-limit": "^8.0.1",
-    "pg": "^8.11.3",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-router-dom": "^6.0.0",
-    "styled-components": "^6.0.0"
+    "@strapi/strapi": "4.25.0",
+    "@strapi/plugin-users-permissions": "4.25.0",
+    "@strapi/plugin-i18n": "4.25.0",
+    "pg": "8.11.3"
   },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "typescript": "^5"
-  },
-  "engines": {
-    "node": ">=18.0.0 <=22.x.x",
-    "npm": ">=6.0.0"
+  "author": {
+    "name": "WandaExchange Team"
   },
   "strapi": {
-    "uuid": "1440e966-6b90-4a18-9c8d-878c9325769c",
-    "installId": "4296f38be8116731468e45c50dced14109103de656dd197332b6b48fe3300fa3"
-  }
+    "uuid": "wandaexchange-blog"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
 }

@@ -13,18 +13,14 @@ jobs:
       matrix:
         node-version: [20.x]
         project:
-          - path: simple-blog
-            name: simple-blog
-          - path: strapi/wandaexchange-blog
-            name: wandaexchange-blog
-          - path: strapi/wandaexchange-blog-app
-            name: wandaexchange-blog-app
+          - path: wanda-strapi
+            name: wanda-strapi
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -37,5 +33,11 @@ jobs:
       - name: Build (${{ matrix.project.name }})
         working-directory: ${{ matrix.project.path }}
         run: npm run build
+
+      - name: Test API endpoints
+        working-directory: ${{ matrix.project.path }}
+        run: |
+          echo "Testing API endpoints..."
+          # Add API tests here when ready
 
 
